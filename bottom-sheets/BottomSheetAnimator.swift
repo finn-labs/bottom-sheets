@@ -12,8 +12,8 @@ class BottomSheetAnimator {
 
     // MARK: - Static Properties
 
-    static let timingParameters = UISpringTimingParameters(dampingRatio: 1.0, initialVelocity: CGVector(dx: 0, dy: 10))
-    static let animationDuration = 0.6
+    static let timingParameters = UICubicTimingParameters(controlPoint1: CGPoint(x: 0.15, y: 0.7), controlPoint2: CGPoint(x: 0.5, y: 1))//UISpringTimingParameters(dampingRatio: 1.0, initialVelocity: CGVector(dx: 0, dy: 10))
+    static let animationDuration = 0.4
 
     // MARK: - Public Properties
 

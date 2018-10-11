@@ -8,6 +8,23 @@
 
 import UIKit
 
+
+class BottomSheetTransition: NSObject, UIViewControllerTransitioningDelegate {
+
+    func animationController(forPresented presented: UIViewController, presenting: UIViewController, source: UIViewController) -> UIViewControllerAnimatedTransitioning? {
+        return BottomSheetPresentationAnimation(duration: BottomSheetAnimator.animationDuration)
+    }
+
+    func animationController(forDismissed dismissed: UIViewController) -> UIViewControllerAnimatedTransitioning? {
+        return BottomSheetDismissAnimation(duration: BottomSheetAnimator.animationDuration)
+    }
+
+    func presentationController(forPresented presented: UIViewController, presenting: UIViewController?, source: UIViewController) -> UIPresentationController? {
+        return BottomSheetPresentationController(presentedViewController: presented, presenting: presenting)
+    }
+
+}
+
 class BottomSheetPresentationController: UIPresentationController {
 
     private let dimView = UIView(frame: .zero)
@@ -59,7 +76,7 @@ class BottomSheetPresentationAnimation: NSObject, UIViewControllerAnimatedTransi
         let containerView = transitionContext.containerView
 
         containerView.addSubview(bottomSheet.view)
-        bottomSheet.view.frame = CGRect(x: 0, y: containerView.frame.maxY, width: containerView.frame.width, height: containerView.frame.height / 2)
+        bottomSheet.view.frame = CGRect(x: 0, y: containerView.frame.maxY, width: containerView.frame.width, height: 0)
         bottomSheet.view.layoutIfNeeded()
         bottomSheet.view.translatesAutoresizingMaskIntoConstraints = false
 
@@ -73,7 +90,7 @@ class BottomSheetPresentationAnimation: NSObject, UIViewControllerAnimatedTransi
             bottomSheet.view.bottomAnchor.constraint(equalTo: containerView.bottomAnchor),
         ])
 
-        animator = UIViewPropertyAnimator(duration: BottomSheetAnimator.animationDuration, timingParameters: BottomSheetAnimator.timingParameters)
+        animator = UIViewPropertyAnimator(duration: duration, timingParameters: BottomSheetAnimator.timingParameters)
         animator.addAnimations { containerView.layoutIfNeeded() }
         animator.addCompletion { position in
             let didComplete = position == .end
@@ -118,20 +135,4 @@ class BottomSheetDismissAnimation: NSObject, UIViewControllerAnimatedTransitioni
     func animationEnded(_ transitionCompleted: Bool) {
         print("Transition is complete")
     }
-}
-
-class BottomSheetTransition: NSObject, UIViewControllerTransitioningDelegate {
-
-    func animationController(forPresented presented: UIViewController, presenting: UIViewController, source: UIViewController) -> UIViewControllerAnimatedTransitioning? {
-        return BottomSheetPresentationAnimation(duration: BottomSheetAnimator.animationDuration)
-    }
-
-    func animationController(forDismissed dismissed: UIViewController) -> UIViewControllerAnimatedTransitioning? {
-        return BottomSheetDismissAnimation(duration: BottomSheetAnimator.animationDuration)
-    }
-
-    func presentationController(forPresented presented: UIViewController, presenting: UIViewController?, source: UIViewController) -> UIPresentationController? {
-        return BottomSheetPresentationController(presentedViewController: presented, presenting: presenting)
-    }
-
 }
