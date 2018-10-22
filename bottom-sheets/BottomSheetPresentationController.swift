@@ -82,13 +82,7 @@ class BottomSheetPresentationController: UIPresentationController {
             }
 
             constraint.constant = target
-
-            animator = UIViewPropertyAnimator(duration: 0, timingParameters: UISpringTimingParameters(dampingRatio: BottomSheet.dampingRatio, frequencyResponse: BottomSheet.frequencyResponse, initialVelocity: initialVelocity!))
-            animator?.addAnimations {
-                //            self.containerView?.layoutIfNeeded()
-                self.presentedViewController.view.frame.origin.y = self.minValue
-            }
-            animator?.startAnimation()
+            animate(to: state)
 
         default:
             return
@@ -102,22 +96,23 @@ extension BottomSheetPresentationController: UIViewControllerAnimatedTransitioni
     }
 
     func animateTransition(using transitionContext: UIViewControllerContextTransitioning) {
-        let velocity = initialVelocity ?? .zero
-        animator = UIViewPropertyAnimator(duration: 0, timingParameters: UISpringTimingParameters(dampingRatio: BottomSheet.dampingRatio, frequencyResponse: BottomSheet.frequencyResponse, initialVelocity: velocity))
-        animator?.addAnimations {
-//            self.containerView?.layoutIfNeeded()
-            guard let containerView = self.containerView else { return }
-            self.presentedViewController.view.frame.origin.y = self.minValue
-        }
-        animator?.addCompletion({ position in
+        animate(to: state) { position in
             let didComplete = position == .end
             transitionContext.completeTransition(didComplete)
-        })
-        animator?.startAnimation()
+        }
     }
 }
 
 private extension BottomSheetPresentationController {
+
+    func animate(to state: BottomSheet.State, completion: ((UIViewAnimatingPosition) -> Void)? = nil) {
+        let velocity = initialVelocity ?? .zero
+        animator = UIViewPropertyAnimator(duration: 0, timingParameters: UISpringTimingParameters(dampingRatio: BottomSheet.dampingRatio, frequencyResponse: BottomSheet.frequencyResponse, initialVelocity: velocity))
+        animator?.addAnimations { self.containerView?.layoutIfNeeded() }
+        if let completion = completion { animator?.addCompletion(completion) }
+        animator?.startAnimation()
+    }
+
     func nextState(forTransition transition: CGPoint, withCurrent current: BottomSheet.State, usingThreshold threshold: CGFloat) -> BottomSheet.State {
         switch current {
         case .compressed:
