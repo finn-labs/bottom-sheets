@@ -13,7 +13,8 @@
 		DA036166216CB82C00223736 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DA036164216CB82C00223736 /* LaunchScreen.storyboard */; };
 		DA03616E216CC71300223736 /* BottomSheetTransition.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA03616D216CC71300223736 /* BottomSheetTransition.swift */; };
 		DA036170216CDBF000223736 /* BottomSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA03616F216CDBF000223736 /* BottomSheet.swift */; };
-		DAC56B90216DFE1100EFF3B4 /* BottomSheetAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAC56B8F216DFE1100EFF3B4 /* BottomSheetAnimator.swift */; };
+		DA05C4C9217626D90005AAF0 /* BottomSheetPresentationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA05C4C8217626D90005AAF0 /* BottomSheetPresentationController.swift */; };
+		DA2D2824217DB2050016E8AE /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA2D2823217DB2050016E8AE /* Extensions.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -25,7 +26,8 @@
 		DA036167216CB82C00223736 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		DA03616D216CC71300223736 /* BottomSheetTransition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomSheetTransition.swift; sourceTree = "<group>"; };
 		DA03616F216CDBF000223736 /* BottomSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomSheet.swift; sourceTree = "<group>"; };
-		DAC56B8F216DFE1100EFF3B4 /* BottomSheetAnimator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomSheetAnimator.swift; sourceTree = "<group>"; };
+		DA05C4C8217626D90005AAF0 /* BottomSheetPresentationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomSheetPresentationController.swift; sourceTree = "<group>"; };
+		DA2D2823217DB2050016E8AE /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -61,8 +63,9 @@
 				DA03615B216CB82B00223736 /* AppDelegate.swift */,
 				DA03615D216CB82B00223736 /* ViewController.swift */,
 				DA03616F216CDBF000223736 /* BottomSheet.swift */,
-				DAC56B8F216DFE1100EFF3B4 /* BottomSheetAnimator.swift */,
 				DA03616D216CC71300223736 /* BottomSheetTransition.swift */,
+				DA05C4C8217626D90005AAF0 /* BottomSheetPresentationController.swift */,
+				DA2D2823217DB2050016E8AE /* Extensions.swift */,
 				DA036162216CB82C00223736 /* Assets.xcassets */,
 				DA036164216CB82C00223736 /* LaunchScreen.storyboard */,
 				DA036167216CB82C00223736 /* Info.plist */,
@@ -141,9 +144,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				DA03615E216CB82B00223736 /* ViewController.swift in Sources */,
+				DA2D2824217DB2050016E8AE /* Extensions.swift in Sources */,
+				DA05C4C9217626D90005AAF0 /* BottomSheetPresentationController.swift in Sources */,
 				DA03615C216CB82B00223736 /* AppDelegate.swift in Sources */,
 				DA036170216CDBF000223736 /* BottomSheet.swift in Sources */,
-				DAC56B90216DFE1100EFF3B4 /* BottomSheetAnimator.swift in Sources */,
 				DA03616E216CC71300223736 /* BottomSheetTransition.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

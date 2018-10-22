@@ -20,6 +20,10 @@ extension BottomSheet {
 
 class BottomSheet: UIViewController {
 
+    static let dampingRatio = 0.85 as CGFloat
+    static let frequencyResponse = 0.45 as CGFloat
+    static let timingParameters = UISpringTimingParameters(dampingRatio: BottomSheet.dampingRatio, frequencyResponse: BottomSheet.frequencyResponse)
+
     let notch: UIView = {
         let view = UIView(frame: .zero)
         view.backgroundColor = .lightGray
@@ -29,23 +33,16 @@ class BottomSheet: UIViewController {
     }()
 
     var state = BottomSheet.State.compressed
-    var animator: BottomSheetAnimator
-
-    init(with animator: BottomSheetAnimator) {
-        self.animator = animator
-        super.init(nibName: nil, bundle: nil)
-        self.animator.bottomSheet = self
-    }
-
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
         view.layer.cornerRadius = 16
         view.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
+
+        view.layer.shadowRadius = 8
+        view.layer.shadowOpacity = 0.2
+        view.layer.shadowOffset = CGSize(width: 0, height: 0)
 
         view.addSubview(notch)
 
@@ -55,7 +52,5 @@ class BottomSheet: UIViewController {
             notch.heightAnchor.constraint(equalToConstant: 4),
             notch.widthAnchor.constraint(equalToConstant: 25)
         ])
-
-        view.addGestureRecognizer(animator.panGesture)
     }
 }

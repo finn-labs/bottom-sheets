@@ -22,6 +22,8 @@ class ViewController: UIViewController {
         return button
     }()
 
+    let transitionDelegate = BottomSheetTransition()
+
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
@@ -33,9 +35,8 @@ class ViewController: UIViewController {
     }
 
     @objc func buttonPressed(sender: UIButton) {
-        let bottomSheet = BottomSheet(with: BottomSheetAnimator())
-        let bottomSheetTransition = BottomSheetTransition()
-        bottomSheet.transitioningDelegate = bottomSheetTransition
+        let bottomSheet = BottomSheet()
+        bottomSheet.transitioningDelegate = transitionDelegate
         bottomSheet.modalPresentationStyle = .custom
         present(bottomSheet, animated: true)
     }
