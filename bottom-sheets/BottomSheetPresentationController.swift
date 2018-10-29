@@ -70,7 +70,7 @@ class BottomSheetPresentationController: UIPresentationController {
             let target = constant(for: state)
 
 
-            if state == .dismiss {
+            if state == .dismissed {
                 bottomSheet.dismiss(animated: true, completion: nil)
                 return
             }
@@ -106,7 +106,7 @@ private extension BottomSheetPresentationController {
         switch current {
         case .compressed:
             if transition.y < -threshold { return .expanded }
-            else if transition.y > threshold { return .dismiss }
+            else if transition.y > threshold { return .dismissed }
             return current
 
         case .expanded:
@@ -125,7 +125,7 @@ private extension BottomSheetPresentationController {
             return containerView.frame.height / 2
         case .expanded:
             return minValue
-        case .dismiss:
+        case .dismissed:
             return containerView.frame.height
         default:
             return 0

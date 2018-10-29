@@ -64,10 +64,11 @@ class SpringAnimator: NSObject {
 
 private extension SpringAnimator {
     func stopAnimation(didComplete: Bool) {
-        if didComplete { constraint?.constant = targetPosition }
+        if didComplete { constraint?.constant = targetPosition }
         displayLink?.invalidate()
         displayLink = nil
         completion?(true)
         completion = nil
+        isAnimating = false
     }
 }

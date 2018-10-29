@@ -13,7 +13,7 @@ extension BottomSheet {
     enum State {
         case expanded
         case compressed
-        case dismiss
+        case dismissed
         case none
     }
 }
