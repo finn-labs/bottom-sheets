@@ -22,7 +22,6 @@ class BottomSheet: UIViewController {
 
     static let dampingRatio = 0.85 as CGFloat
     static let frequencyResponse = 0.45 as CGFloat
-    static let timingParameters = UISpringTimingParameters(dampingRatio: BottomSheet.dampingRatio, frequencyResponse: BottomSheet.frequencyResponse)
 
     let notch: UIView = {
         let view = UIView(frame: .zero)
@@ -31,8 +30,6 @@ class BottomSheet: UIViewController {
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
-
-    let contentView = UIView(frame: .zero)
 
     var state = BottomSheet.State.compressed
 
@@ -47,18 +44,12 @@ class BottomSheet: UIViewController {
         view.layer.shadowOffset = CGSize(width: 0, height: 0)
 
         view.addSubview(notch)
-        view.addSubview(contentView)
 
         NSLayoutConstraint.activate([
             notch.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             notch.topAnchor.constraint(equalTo: view.topAnchor, constant: 8),
             notch.heightAnchor.constraint(equalToConstant: 4),
-            notch.widthAnchor.constraint(equalToConstant: 25),
-
-            contentView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            contentView.topAnchor.constraint(equalTo: view.topAnchor, constant: 44),
-            contentView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            contentView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+            notch.widthAnchor.constraint(equalToConstant: 25)
         ])
     }
 }

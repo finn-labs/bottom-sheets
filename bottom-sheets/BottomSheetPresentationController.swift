@@ -10,16 +10,16 @@ import UIKit
 
 class BottomSheetPresentationController: UIPresentationController {
 
-    var animator: UIViewPropertyAnimator?
+    let animator = SpringAnimator(dampingRatio: 0.78, frequencyResponse: 0.5)
     var constraint: NSLayoutConstraint?
     var panGesture: UIPanGestureRecognizer?
 
     private let dimView = UIView(frame: .zero)
-    private var initialVelocity: CGVector?
+    private var initialVelocity: CGPoint = .zero
     private var initialConstant = 0 as CGFloat
-    private var threshold = 64 as CGFloat
+    private var threshold = 88 as CGFloat
     private var minValue = 44 as CGFloat
-    private var state: BottomSheet.State = .none
+    private var state: BottomSheet.State = .compressed
 
     override var presentationStyle: UIModalPresentationStyle {
         return .overCurrentContext
@@ -31,7 +31,6 @@ class BottomSheetPresentationController: UIPresentationController {
 
     override func presentationTransitionWillBegin() {
         guard let containerView = containerView, let presentedView = presentedView else { return }
-        containerView.backgroundColor = .red
         containerView.addSubview(presentedView)
         presentedView.translatesAutoresizingMaskIntoConstraints = false
 
@@ -44,14 +43,10 @@ class BottomSheetPresentationController: UIPresentationController {
             ])
 
         containerView.layoutIfNeeded()
-        constraint?.constant = constant(for: .compressed)
+        animator.constraint = constraint
 
         panGesture = UIPanGestureRecognizer(target: self, action: #selector(handlePan(gesture:)))
         presentedView.addGestureRecognizer(panGesture!)
-    }
-
-    override func dismissalTransitionWillBegin() {
-        constraint?.constant = constant(for: .dismiss)
     }
 
     @objc func handlePan(gesture: UIPanGestureRecognizer) {
@@ -61,28 +56,28 @@ class BottomSheetPresentationController: UIPresentationController {
         switch gesture.state {
         case .began:
             initialConstant = constraint.constant
+            if animator.isAnimating { animator.stopAnimation() }
 
         case .changed:
             state = nextState(forTransition: translation, withCurrent: bottomSheet.state, usingThreshold: threshold)
             let constant = initialConstant + translation.y
-            guard constant >= minValue else { return }
-            constraint.constant = constant
+            if constant < minValue { constraint.constant = minValue }
+            else { constraint.constant = constant }
 
         case .ended:
             bottomSheet.state = state
-
-            // Normalize gesture velocity
+            initialVelocity = gesture.velocity(in: bottomSheet.view)
             let target = constant(for: state)
-            let velocity = gesture.velocity(in: containerView).y / (target - constraint.constant)
-            initialVelocity = CGVector(dx: 0, dy: velocity)
+
 
             if state == .dismiss {
                 bottomSheet.dismiss(animated: true, completion: nil)
                 return
             }
 
-            constraint.constant = target
-            animate(to: state)
+            animator.targetPosition = target
+            animator.initialVelocity = initialVelocity.y
+            animator.startAnimation()
 
         default:
             return
@@ -96,22 +91,16 @@ extension BottomSheetPresentationController: UIViewControllerAnimatedTransitioni
     }
 
     func animateTransition(using transitionContext: UIViewControllerContextTransitioning) {
-        animate(to: state) { position in
-            let didComplete = position == .end
+        animator.targetPosition = constant(for: state)
+        animator.initialVelocity = initialVelocity.y
+        animator.completion = { didComplete in
             transitionContext.completeTransition(didComplete)
         }
+        animator.startAnimation()
     }
 }
 
 private extension BottomSheetPresentationController {
-
-    func animate(to state: BottomSheet.State, completion: ((UIViewAnimatingPosition) -> Void)? = nil) {
-        let velocity = initialVelocity ?? .zero
-        animator = UIViewPropertyAnimator(duration: 0, timingParameters: UISpringTimingParameters(dampingRatio: BottomSheet.dampingRatio, frequencyResponse: BottomSheet.frequencyResponse, initialVelocity: velocity))
-        animator?.addAnimations { self.containerView?.layoutIfNeeded() }
-        if let completion = completion { animator?.addCompletion(completion) }
-        animator?.startAnimation()
-    }
 
     func nextState(forTransition transition: CGPoint, withCurrent current: BottomSheet.State, usingThreshold threshold: CGFloat) -> BottomSheet.State {
         switch current {
