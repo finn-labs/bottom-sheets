@@ -14,7 +14,6 @@ extension BottomSheet {
         case expanded
         case compressed
         case dismissed
-        case none
     }
 }
 
@@ -25,31 +24,63 @@ class BottomSheet: UIViewController {
 
     let notch: UIView = {
         let view = UIView(frame: .zero)
-        view.backgroundColor = .lightGray
+        view.backgroundColor = .white
         view.layer.cornerRadius = 2
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
 
-    var state = BottomSheet.State.compressed
+    let transitionDelegate = BottomSheetTransition()
+
+    var rootViewController: UIViewController
+
+    init(rootViewController: UIViewController) {
+        self.rootViewController = rootViewController
+        super.init(nibName: nil, bundle: nil)
+        transitionDelegate.delegate = self
+        transitioningDelegate = transitionDelegate
+        modalPresentationStyle = .custom
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
+        view.clipsToBounds = true
         view.layer.cornerRadius = 16
         view.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
 
-        view.layer.shadowRadius = 8
-        view.layer.shadowOpacity = 0.2
-        view.layer.shadowOffset = CGSize(width: 0, height: 0)
-
         view.addSubview(notch)
+
+        addChild(rootViewController)
+        view.insertSubview(rootViewController.view, belowSubview: notch)
+        rootViewController.didMove(toParent: self)
+        rootViewController.view.translatesAutoresizingMaskIntoConstraints = false
 
         NSLayoutConstraint.activate([
             notch.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             notch.topAnchor.constraint(equalTo: view.topAnchor, constant: 8),
             notch.heightAnchor.constraint(equalToConstant: 4),
-            notch.widthAnchor.constraint(equalToConstant: 25)
+            notch.widthAnchor.constraint(equalToConstant: 25),
+
+            rootViewController.view.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            rootViewController.view.topAnchor.constraint(equalTo: view.topAnchor),
+            rootViewController.view.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            rootViewController.view.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
+    }
+}
+
+extension BottomSheet: BottomSheetPresentationDelegate {
+    func bottomSheetDidChangeState(_ state: BottomSheet.State) {
+        print("Did change state")
+    }
+
+    func bottomSheetDidFullyExpand() {
+        guard let tableViewController = rootViewController as? UITableViewController else { return }
+        tableViewController.tableView.isScrollEnabled = true
     }
 }

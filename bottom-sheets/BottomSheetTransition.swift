@@ -12,9 +12,11 @@ import UIKit
 class BottomSheetTransition: NSObject, UIViewControllerTransitioningDelegate {
 
     var controller: BottomSheetPresentationController?
+    weak var delegate: BottomSheetPresentationDelegate?
 
     func presentationController(forPresented presented: UIViewController, presenting: UIViewController?, source: UIViewController) -> UIPresentationController? {
         controller = BottomSheetPresentationController(presentedViewController: presented, presenting: presenting)
+        controller?.bottomSheetDelegate = delegate
         return controller
     }
 
@@ -23,6 +25,14 @@ class BottomSheetTransition: NSObject, UIViewControllerTransitioningDelegate {
     }
 
     func animationController(forDismissed dismissed: UIViewController) -> UIViewControllerAnimatedTransitioning? {
+        return controller
+    }
+
+    func interactionControllerForPresentation(using animator: UIViewControllerAnimatedTransitioning) -> UIViewControllerInteractiveTransitioning? {
+        return controller
+    }
+
+    func interactionControllerForDismissal(using animator: UIViewControllerAnimatedTransitioning) -> UIViewControllerInteractiveTransitioning? {
         return controller
     }
 

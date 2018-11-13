@@ -8,18 +8,27 @@
 
 import UIKit
 
+protocol BottomSheetPresentationDelegate: class {
+    func bottomSheetDidChangeState(_ state: BottomSheet.State)
+    func bottomSheetDidFullyExpand()
+}
+
 class BottomSheetPresentationController: UIPresentationController {
 
-    let animator = SpringAnimator(dampingRatio: 0.78, frequencyResponse: 0.5)
+    let animator = BottomSheetSpringAnimator(dampingRatio: 0.78, frequencyResponse: 0.5)
     var constraint: NSLayoutConstraint?
     var panGesture: UIPanGestureRecognizer?
 
-    private let dimView = UIView(frame: .zero)
+    weak var bottomSheetDelegate: BottomSheetPresentationDelegate?
+
     private var initialVelocity: CGPoint = .zero
     private var initialConstant = 0 as CGFloat
-    private var threshold = 88 as CGFloat
+
+    private var threshold = 78 as CGFloat
     private var minValue = 44 as CGFloat
-    private var state: BottomSheet.State = .compressed
+
+    private var currentState: BottomSheet.State = .compressed
+    private var trackingState: BottomSheet.State = .compressed
 
     override var presentationStyle: UIModalPresentationStyle {
         return .overCurrentContext
@@ -50,34 +59,45 @@ class BottomSheetPresentationController: UIPresentationController {
     }
 
     @objc func handlePan(gesture: UIPanGestureRecognizer) {
-        guard let bottomSheet = presentedViewController as? BottomSheet, let constraint = constraint else { return }
+        guard let containerView = containerView, let constraint = constraint else { return }
         let translation = gesture.translation(in: containerView)
 
         switch gesture.state {
         case .began:
+            animator.pauseAnimation()
             initialConstant = constraint.constant
-            if animator.isAnimating { animator.stopAnimation() }
 
         case .changed:
-            state = nextState(forTransition: translation, withCurrent: bottomSheet.state, usingThreshold: threshold)
+            trackingState = nextState(forTransition: translation, withCurrent: currentState, usingThreshold: threshold)
             let constant = initialConstant + translation.y
-            if constant < minValue { constraint.constant = minValue }
+            if constant < minValue {
+                constraint.constant = minValue
+                bottomSheetDelegate?.bottomSheetDidFullyExpand()
+            }
             else { constraint.constant = constant }
 
         case .ended:
-            bottomSheet.state = state
-            initialVelocity = gesture.velocity(in: bottomSheet.view)
-            let target = constant(for: state)
+            initialVelocity = gesture.velocity(in: containerView)
 
+            if trackingState != currentState {
+                currentState = trackingState
+                bottomSheetDelegate?.bottomSheetDidChangeState(currentState)
+            }
 
-            if state == .dismissed {
-                bottomSheet.dismiss(animated: true, completion: nil)
-                return
+            let target = constant(for: trackingState)
+
+            if trackingState == .dismissed {
+                presentedViewController.dismiss(animated: true)
             }
 
             animator.targetPosition = target
             animator.initialVelocity = initialVelocity.y
-            animator.startAnimation()
+            switch animator.state {
+            case .paused:
+                animator.continueAnimation()
+            default:
+                animator.startAnimation()
+            }
 
         default:
             return
@@ -85,13 +105,10 @@ class BottomSheetPresentationController: UIPresentationController {
     }
 }
 
-extension BottomSheetPresentationController: UIViewControllerAnimatedTransitioning {
-    func transitionDuration(using transitionContext: UIViewControllerContextTransitioning?) -> TimeInterval {
-        return 0
-    }
+extension BottomSheetPresentationController: UIViewControllerInteractiveTransitioning {
 
-    func animateTransition(using transitionContext: UIViewControllerContextTransitioning) {
-        animator.targetPosition = constant(for: state)
+    func startInteractiveTransition(_ transitionContext: UIViewControllerContextTransitioning) {
+        animator.targetPosition = constant(for: currentState)
         animator.initialVelocity = initialVelocity.y
         animator.completion = { didComplete in
             transitionContext.completeTransition(didComplete)
@@ -107,15 +124,12 @@ private extension BottomSheetPresentationController {
         case .compressed:
             if transition.y < -threshold { return .expanded }
             else if transition.y > threshold { return .dismissed }
-            return current
-
         case .expanded:
             if transition.y > threshold { return .compressed }
-            return current
-
-        default:
-            return current
+        case .dismissed:
+            if transition.y < -threshold { return .compressed }
         }
+        return current
     }
 
     func constant(for state: BottomSheet.State) -> CGFloat {
@@ -127,8 +141,16 @@ private extension BottomSheetPresentationController {
             return minValue
         case .dismissed:
             return containerView.frame.height
-        default:
-            return 0
         }
+    }
+}
+
+extension BottomSheetPresentationController: UIViewControllerAnimatedTransitioning {
+    func transitionDuration(using transitionContext: UIViewControllerContextTransitioning?) -> TimeInterval {
+        return 0
+    }
+
+    func animateTransition(using transitionContext: UIViewControllerContextTransitioning) {
+        return
     }
 }

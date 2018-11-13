@@ -15,7 +15,7 @@
 		DA036170216CDBF000223736 /* BottomSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA03616F216CDBF000223736 /* BottomSheet.swift */; };
 		DA05C4C9217626D90005AAF0 /* BottomSheetPresentationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA05C4C8217626D90005AAF0 /* BottomSheetPresentationController.swift */; };
 		DA2D2824217DB2050016E8AE /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA2D2823217DB2050016E8AE /* Extensions.swift */; };
-		DAE69E26218712210084F37C /* SpringAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAE69E25218712210084F37C /* SpringAnimator.swift */; };
+		DAE69E26218712210084F37C /* BottomSheetSpringAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAE69E25218712210084F37C /* BottomSheetSpringAnimator.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -29,7 +29,7 @@
 		DA03616F216CDBF000223736 /* BottomSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomSheet.swift; sourceTree = "<group>"; };
 		DA05C4C8217626D90005AAF0 /* BottomSheetPresentationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomSheetPresentationController.swift; sourceTree = "<group>"; };
 		DA2D2823217DB2050016E8AE /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
-		DAE69E25218712210084F37C /* SpringAnimator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpringAnimator.swift; sourceTree = "<group>"; };
+		DAE69E25218712210084F37C /* BottomSheetSpringAnimator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomSheetSpringAnimator.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -63,7 +63,7 @@
 			isa = PBXGroup;
 			children = (
 				DA03615B216CB82B00223736 /* AppDelegate.swift */,
-				DAE69E25218712210084F37C /* SpringAnimator.swift */,
+				DAE69E25218712210084F37C /* BottomSheetSpringAnimator.swift */,
 				DA03615D216CB82B00223736 /* ViewController.swift */,
 				DA03616F216CDBF000223736 /* BottomSheet.swift */,
 				DA03616D216CC71300223736 /* BottomSheetTransition.swift */,
@@ -148,7 +148,7 @@
 			files = (
 				DA03615E216CB82B00223736 /* ViewController.swift in Sources */,
 				DA2D2824217DB2050016E8AE /* Extensions.swift in Sources */,
-				DAE69E26218712210084F37C /* SpringAnimator.swift in Sources */,
+				DAE69E26218712210084F37C /* BottomSheetSpringAnimator.swift in Sources */,
 				DA05C4C9217626D90005AAF0 /* BottomSheetPresentationController.swift in Sources */,
 				DA03615C216CB82B00223736 /* AppDelegate.swift in Sources */,
 				DA036170216CDBF000223736 /* BottomSheet.swift in Sources */,

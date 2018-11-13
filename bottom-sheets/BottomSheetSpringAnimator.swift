@@ -8,7 +8,14 @@
 
 import UIKit
 
-class SpringAnimator: NSObject {
+extension BottomSheetSpringAnimator {
+
+    enum State {
+        case animating, paused, cancelled, stopped
+    }
+}
+
+class BottomSheetSpringAnimator: NSObject {
 
     // Spring properties
     let damping: CGFloat
@@ -22,7 +29,8 @@ class SpringAnimator: NSObject {
     }
 
     // Animation properties
-    var isAnimating = false
+    var state: State = .stopped
+
     var targetPosition = 0 as CGFloat
     var constraint: NSLayoutConstraint?
 
@@ -37,18 +45,39 @@ class SpringAnimator: NSObject {
     }
 
     func startAnimation() {
+        if state == .paused { stopAnimation(didComplete: false) }
+
         guard let constraint = constraint else { return }
         position = targetPosition - constraint.constant
 
         guard position != 0, displayLink == nil else { return }
         displayLink = CADisplayLink(target: self, selector: #selector(step(displayLink:)))
         displayLink?.add(to: .current, forMode: .default)
-        isAnimating = true
+        state = .animating
+    }
+
+    func continueAnimation() {
+        guard state == .paused, let constraint = constraint else { return }
+        position = targetPosition - constraint.constant
+        state = .animating
+        displayLink?.isPaused = false
+    }
+
+    func pauseAnimation() {
+        guard state == .animating else { return }
+        state = .paused
+        displayLink?.isPaused = true
     }
 
     func stopAnimation() {
-        stopAnimation(didComplete: false)
+        switch state {
+        case .animating, .paused: stopAnimation(didComplete: false)
+        default: return
+        }
     }
+}
+
+private extension BottomSheetSpringAnimator {
 
     @objc func step(displayLink: CADisplayLink) {
         let acceleration = -velocity * damping - position * stiffness
@@ -60,15 +89,17 @@ class SpringAnimator: NSObject {
             stopAnimation(didComplete: true)
         }
     }
-}
 
-private extension SpringAnimator {
     func stopAnimation(didComplete: Bool) {
         if didComplete { constraint?.constant = targetPosition }
         displayLink?.invalidate()
         displayLink = nil
-        completion?(true)
+        completion?(didComplete)
         completion = nil
-        isAnimating = false
+
+        switch didComplete {
+        case true: state = .stopped
+        case false: state = .cancelled
+        }
     }
 }

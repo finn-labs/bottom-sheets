@@ -22,7 +22,12 @@ class ViewController: UIViewController {
         return button
     }()
 
-    let transitionDelegate = BottomSheetTransition()
+    let rootController: UITableViewController = {
+        let controller = UITableViewController(style: .plain)
+        controller.tableView.isScrollEnabled = false
+        controller.view.backgroundColor = UIColor(hue: 0.5, saturation: 0.3, brightness: 0.6, alpha: 1.0)
+        return controller
+    }()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -35,9 +40,7 @@ class ViewController: UIViewController {
     }
 
     @objc func buttonPressed(sender: UIButton) {
-        let bottomSheet = BottomSheet()
-        bottomSheet.transitioningDelegate = transitionDelegate
-        bottomSheet.modalPresentationStyle = .custom
+        let bottomSheet = BottomSheet(rootViewController: rootController)
         present(bottomSheet, animated: true)
     }
 }
