@@ -11,11 +11,13 @@
 		DA03615E216CB82B00223736 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA03615D216CB82B00223736 /* ViewController.swift */; };
 		DA036163216CB82C00223736 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DA036162216CB82C00223736 /* Assets.xcassets */; };
 		DA036166216CB82C00223736 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DA036164216CB82C00223736 /* LaunchScreen.storyboard */; };
-		DA03616E216CC71300223736 /* BottomSheetTransition.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA03616D216CC71300223736 /* BottomSheetTransition.swift */; };
+		DA03616E216CC71300223736 /* BottomSheetTransitioningDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA03616D216CC71300223736 /* BottomSheetTransitioningDelegate.swift */; };
 		DA036170216CDBF000223736 /* BottomSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA03616F216CDBF000223736 /* BottomSheet.swift */; };
 		DA05C4C9217626D90005AAF0 /* BottomSheetPresentationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA05C4C8217626D90005AAF0 /* BottomSheetPresentationController.swift */; };
 		DA2D2824217DB2050016E8AE /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA2D2823217DB2050016E8AE /* Extensions.swift */; };
-		DAE69E26218712210084F37C /* BottomSheetSpringAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAE69E25218712210084F37C /* BottomSheetSpringAnimator.swift */; };
+		DA4B2A03219C73C90008AC87 /* BottomSheetInteractionController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA4B2A02219C73C90008AC87 /* BottomSheetInteractionController.swift */; };
+		DA4B2A07219C759D0008AC87 /* BottomSheetAnimationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA4B2A06219C759D0008AC87 /* BottomSheetAnimationController.swift */; };
+		DAE69E26218712210084F37C /* SpringAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAE69E25218712210084F37C /* SpringAnimator.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -25,11 +27,13 @@
 		DA036162216CB82C00223736 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		DA036165216CB82C00223736 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		DA036167216CB82C00223736 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		DA03616D216CC71300223736 /* BottomSheetTransition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomSheetTransition.swift; sourceTree = "<group>"; };
+		DA03616D216CC71300223736 /* BottomSheetTransitioningDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomSheetTransitioningDelegate.swift; sourceTree = "<group>"; };
 		DA03616F216CDBF000223736 /* BottomSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomSheet.swift; sourceTree = "<group>"; };
 		DA05C4C8217626D90005AAF0 /* BottomSheetPresentationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomSheetPresentationController.swift; sourceTree = "<group>"; };
 		DA2D2823217DB2050016E8AE /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
-		DAE69E25218712210084F37C /* BottomSheetSpringAnimator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomSheetSpringAnimator.swift; sourceTree = "<group>"; };
+		DA4B2A02219C73C90008AC87 /* BottomSheetInteractionController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomSheetInteractionController.swift; sourceTree = "<group>"; };
+		DA4B2A06219C759D0008AC87 /* BottomSheetAnimationController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BottomSheetAnimationController.swift; sourceTree = "<group>"; };
+		DAE69E25218712210084F37C /* SpringAnimator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpringAnimator.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -63,11 +67,13 @@
 			isa = PBXGroup;
 			children = (
 				DA03615B216CB82B00223736 /* AppDelegate.swift */,
-				DAE69E25218712210084F37C /* BottomSheetSpringAnimator.swift */,
 				DA03615D216CB82B00223736 /* ViewController.swift */,
 				DA03616F216CDBF000223736 /* BottomSheet.swift */,
-				DA03616D216CC71300223736 /* BottomSheetTransition.swift */,
+				DA03616D216CC71300223736 /* BottomSheetTransitioningDelegate.swift */,
+				DA4B2A06219C759D0008AC87 /* BottomSheetAnimationController.swift */,
+				DA4B2A02219C73C90008AC87 /* BottomSheetInteractionController.swift */,
 				DA05C4C8217626D90005AAF0 /* BottomSheetPresentationController.swift */,
+				DAE69E25218712210084F37C /* SpringAnimator.swift */,
 				DA2D2823217DB2050016E8AE /* Extensions.swift */,
 				DA036162216CB82C00223736 /* Assets.xcassets */,
 				DA036164216CB82C00223736 /* LaunchScreen.storyboard */,
@@ -148,11 +154,13 @@
 			files = (
 				DA03615E216CB82B00223736 /* ViewController.swift in Sources */,
 				DA2D2824217DB2050016E8AE /* Extensions.swift in Sources */,
-				DAE69E26218712210084F37C /* BottomSheetSpringAnimator.swift in Sources */,
+				DAE69E26218712210084F37C /* SpringAnimator.swift in Sources */,
+				DA4B2A07219C759D0008AC87 /* BottomSheetAnimationController.swift in Sources */,
+				DA4B2A03219C73C90008AC87 /* BottomSheetInteractionController.swift in Sources */,
 				DA05C4C9217626D90005AAF0 /* BottomSheetPresentationController.swift in Sources */,
 				DA03615C216CB82B00223736 /* AppDelegate.swift in Sources */,
 				DA036170216CDBF000223736 /* BottomSheet.swift in Sources */,
-				DA03616E216CC71300223736 /* BottomSheetTransition.swift in Sources */,
+				DA03616E216CC71300223736 /* BottomSheetTransitioningDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

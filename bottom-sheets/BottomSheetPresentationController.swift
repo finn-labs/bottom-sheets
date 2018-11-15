@@ -14,8 +14,26 @@ protocol BottomSheetPresentationDelegate: class {
 }
 
 class BottomSheetPresentationController: UIPresentationController {
+    
+    var interactioController: BottomSheetInteractionController?
+    weak var presentationDelegate: BottomSheetPresentationDelegate?
 
-    let animator = BottomSheetSpringAnimator(dampingRatio: 0.78, frequencyResponse: 0.5)
+    override var presentationStyle: UIModalPresentationStyle {
+        return .overCurrentContext
+    }
+
+    override var shouldPresentInFullscreen: Bool {
+        return false
+    }
+
+    override func presentationTransitionWillBegin() {
+        print("Presentation")
+    }
+}
+
+/*class BottomSheetPresentationController: UIPresentationController {
+
+    let animator = SpringAnimator(dampingRatio: 0.78, frequencyResponse: 0.5)
     var constraint: NSLayoutConstraint?
     var panGesture: UIPanGestureRecognizer?
 
@@ -153,4 +171,4 @@ extension BottomSheetPresentationController: UIViewControllerAnimatedTransitioni
     func animateTransition(using transitionContext: UIViewControllerContextTransitioning) {
         return
     }
-}
+}*/

@@ -30,14 +30,13 @@ class BottomSheet: UIViewController {
         return view
     }()
 
-    let transitionDelegate = BottomSheetTransition()
+    let transitionDelegate = BottomSheetTransitioningDelegate()
 
     var rootViewController: UIViewController
 
     init(rootViewController: UIViewController) {
         self.rootViewController = rootViewController
         super.init(nibName: nil, bundle: nil)
-        transitionDelegate.delegate = self
         transitioningDelegate = transitionDelegate
         modalPresentationStyle = .custom
     }
