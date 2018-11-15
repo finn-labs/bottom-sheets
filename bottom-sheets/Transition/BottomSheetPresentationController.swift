@@ -8,15 +8,23 @@
 
 import UIKit
 
-protocol BottomSheetPresentationDelegate: class {
-    func bottomSheetDidChangeState(_ state: BottomSheet.State)
-    func bottomSheetDidFullyExpand()
+extension BottomSheetPresentationController {
+
+    enum State {
+        case expanded
+        case compressed
+        case dismissed
+    }
 }
 
 class BottomSheetPresentationController: UIPresentationController {
     
-    var interactioController: BottomSheetInteractionController?
-    weak var presentationDelegate: BottomSheetPresentationDelegate?
+    var interactionController: BottomSheetInteractionController?
+
+    private var constraint: NSLayoutConstraint?
+    private var gestureController: BottomSheetGestureController?
+
+    private var state: State = .compressed
 
     override var presentationStyle: UIModalPresentationStyle {
         return .overCurrentContext
@@ -27,7 +35,44 @@ class BottomSheetPresentationController: UIPresentationController {
     }
 
     override func presentationTransitionWillBegin() {
-        print("Presentation")
+        guard let containerView = containerView, let presentedView = presentedView else { return }
+
+        // Setup presentation
+        containerView.addSubview(presentedView)
+        presentedView.translatesAutoresizingMaskIntoConstraints = false
+
+        let constraint = presentedView.topAnchor.constraint(equalTo: containerView.topAnchor, constant: containerView.bounds.height)
+        NSLayoutConstraint.activate([
+            constraint,
+            presentedView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
+            presentedView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
+            presentedView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor),
+        ])
+
+        // Setup interaction controller
+        interactionController?.setup(with: constraint)
+
+        self.constraint = constraint
+    }
+
+    override func presentationTransitionDidEnd(_ completed: Bool) {
+        print("Begin presentation")
+        interactionController = nil
+        print("Container gestures:", containerView?.gestureRecognizers)
+    }
+}
+
+extension BottomSheetPresentationController: BottomSheetGestureControllerDelegate {
+    func gestureDidBegin() -> CGFloat {
+        return 0
+    }
+
+    func gestureDidChange(position: CGFloat) {}
+
+    func gestureDidEnd(with state: BottomSheetPresentationController.State, andTargetPosition position: CGFloat) {}
+
+    func currentPresentationState(for gestureController: BottomSheetGestureController) -> BottomSheetPresentationController.State {
+        return state
     }
 }
 

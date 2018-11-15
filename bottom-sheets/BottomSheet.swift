@@ -8,15 +8,6 @@
 
 import UIKit
 
-extension BottomSheet {
-
-    enum State {
-        case expanded
-        case compressed
-        case dismissed
-    }
-}
-
 class BottomSheet: UIViewController {
 
     static let dampingRatio = 0.85 as CGFloat
@@ -73,13 +64,3 @@ class BottomSheet: UIViewController {
     }
 }
 
-extension BottomSheet: BottomSheetPresentationDelegate {
-    func bottomSheetDidChangeState(_ state: BottomSheet.State) {
-        print("Did change state")
-    }
-
-    func bottomSheetDidFullyExpand() {
-        guard let tableViewController = rootViewController as? UITableViewController else { return }
-        tableViewController.tableView.isScrollEnabled = true
-    }
-}
