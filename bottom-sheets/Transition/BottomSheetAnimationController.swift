@@ -18,7 +18,7 @@ class BottomSheetAnimationController: NSObject, UIViewControllerAnimatedTransiti
     func setup(with constraint: NSLayoutConstraint?) {
         animator.constraint = constraint
     }
-
+    // Because this is a spring animation the duration is unknown
     func transitionDuration(using transitionContext: UIViewControllerContextTransitioning?) -> TimeInterval {
         return 0
     }

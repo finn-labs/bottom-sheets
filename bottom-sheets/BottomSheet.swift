@@ -10,9 +10,6 @@ import UIKit
 
 class BottomSheet: UIViewController {
 
-    static let dampingRatio = 0.85 as CGFloat
-    static let frequencyResponse = 0.45 as CGFloat
-
     let notch: UIView = {
         let view = UIView(frame: .zero)
         view.backgroundColor = .white

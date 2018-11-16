@@ -61,6 +61,7 @@ class BottomSheetPresentationController: UIPresentationController {
         gestureController?.delegate = interactionController
         // Setup interactive transition for presenting
         interactionController?.setup(with: constraint)
+        interactionController?.targetTransitionPosition = containerView.frame.height / 2
     }
 
     override func presentationTransitionDidEnd(_ completed: Bool) {
@@ -76,6 +77,7 @@ class BottomSheetPresentationController: UIPresentationController {
         interactionController?.setup(with: constraint)
         interactionController?.presentationState = presentationState
         interactionController?.initialTransitionVelocity = gestureController?.velocity ?? 0
+        interactionController?.targetTransitionPosition = containerView?.frame.height ?? 0
     }
 
     override func dismissalTransitionDidEnd(_ completed: Bool) {
