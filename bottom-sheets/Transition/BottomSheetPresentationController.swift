@@ -13,7 +13,7 @@ import UIKit
  This object operates together with the interaction controller to create the complete transition.
 
  When the presentation transition begins, this object will create a gesture controller and set its delegate to the interaction controller in order to interact with the transition animation.
- After the transition if finished, this objects becomes the gesture controllers delegate and is in controller of the constraint during the presentation.
+ After the transition if finished, this objects becomes the gesture controllers delegate and is in control of the constraint during the presentation.
 
  At this point, only the presenting transition is made interactive because the presentation is it self an interactive way of dismissing the bottom sheet.
 **/

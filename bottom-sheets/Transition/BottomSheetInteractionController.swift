@@ -22,7 +22,6 @@ class BottomSheetInteractionController: NSObject, UIViewControllerInteractiveTra
     var targetTransitionPosition = 0 as CGFloat
 
     var presentationState: BottomSheetPresentationController.State = .compressed
-    var transitionState: BottomSheetTransitioningDelegate.State = .present
 
     private var constraint: NSLayoutConstraint?
     private var transitionContext: UIViewControllerContextTransitioning?
@@ -42,6 +41,7 @@ class BottomSheetInteractionController: NSObject, UIViewControllerInteractiveTra
     }
 }
 
+// The interaction is only used during the presentation transition
 extension BottomSheetInteractionController: BottomSheetGestureControllerDelegate {
     func gestureDidBegin() -> CGFloat {
         // interrupt the transition
@@ -55,8 +55,7 @@ extension BottomSheetInteractionController: BottomSheetGestureControllerDelegate
     }
 
     func gestureDidEnd(with state: BottomSheetPresentationController.State, targetPosition position: CGFloat, andVelocity velocity: CGFloat) {
-        // Can only interact with the presented transition for now
-        guard transitionState == .present, let transitionContext = transitionContext else { return }
+        guard let transitionContext = transitionContext else { return }
         self.presentationState = state
         animator?.initialVelocity = velocity
         animator?.targetPosition = position

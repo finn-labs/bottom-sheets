@@ -35,7 +35,6 @@ class BottomSheetTransitioningDelegate: NSObject, UIViewControllerTransitioningD
         guard let animator = animator as? BottomSheetAnimationController else { return nil }
         let interactionController = BottomSheetInteractionController()
         interactionController.animator = animator
-        interactionController.transitionState = .present
         presentationController?.interactionController = interactionController
         return interactionController
     }
@@ -44,7 +43,6 @@ class BottomSheetTransitioningDelegate: NSObject, UIViewControllerTransitioningD
         guard let animator = animator as? BottomSheetAnimationController else { return nil }
         let interactionController = BottomSheetInteractionController()
         interactionController.animator = animator
-        interactionController.transitionState = .dismiss
         presentationController?.interactionController = interactionController
         return interactionController
     }
