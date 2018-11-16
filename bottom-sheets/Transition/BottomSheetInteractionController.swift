@@ -11,14 +11,15 @@ import UIKit
 class BottomSheetInteractionController: NSObject, UIViewControllerInteractiveTransitioning {
 
     var animator: BottomSheetAnimationController?
+    var initialTransitionVelocity = 0 as CGFloat
+
+    var presentationState: BottomSheetPresentationController.State = .compressed
+    var transitionState: BottomSheetTransitioningDelegate.State = .present
 
     private var constraint: NSLayoutConstraint?
-    private var gestureController: BottomSheetGestureController?
     private var transitionContext: UIViewControllerContextTransitioning?
 
-    private var state: BottomSheetPresentationController.State = .compressed
-
-    func setup(with constraint: NSLayoutConstraint) {
+    func setup(with constraint: NSLayoutConstraint?) {
         self.constraint = constraint
         animator?.setup(with: constraint)
     }
@@ -26,10 +27,14 @@ class BottomSheetInteractionController: NSObject, UIViewControllerInteractiveTra
     func startInteractiveTransition(_ transitionContext: UIViewControllerContextTransitioning) {
         // Keep track of context for any future transition related actions
         self.transitionContext = transitionContext
-        // Setup pan gesture
-        gestureController = BottomSheetGestureController(containerView: transitionContext.containerView)
-        gestureController?.delegate = self
         // Start transition animation
+        switch transitionState {
+        case .present:
+            animator?.targetPosition = transitionContext.containerView.bounds.height / 2
+        case .dismiss:
+            animator?.targetPosition = transitionContext.containerView.bounds.height
+        }
+        animator?.initialVelocity = initialTransitionVelocity
         animator?.animateTransition(using: transitionContext)
     }
 }
@@ -37,7 +42,7 @@ class BottomSheetInteractionController: NSObject, UIViewControllerInteractiveTra
 extension BottomSheetInteractionController: BottomSheetGestureControllerDelegate {
     func gestureDidBegin() -> CGFloat {
         // interrupt the transition
-        animator?.pauseAnimation()
+        animator?.pauseTransition()
         return constraint?.constant ?? 0
     }
 
@@ -46,15 +51,19 @@ extension BottomSheetInteractionController: BottomSheetGestureControllerDelegate
         constraint?.constant = position
     }
 
-    func gestureDidEnd(with state: BottomSheetPresentationController.State, andTargetPosition position: CGFloat) {
-        self.state = state
-        // If user hides bottom sheet, cancel transition
-
-        // Continue animation to either expanded or compressed state
-        animator?.continueAnimation(toTargetPosition: position) // target position and velocity
+    func gestureDidEnd(with state: BottomSheetPresentationController.State, targetPosition position: CGFloat, andVelocity velocity: CGFloat) {
+        // Can only interact with the presented transition for now
+        guard transitionState == .present, let transitionContext = transitionContext else { return }
+        self.presentationState = state
+        animator?.initialVelocity = velocity
+        animator?.targetPosition = position
+        switch state {
+        case .dismissed: animator?.cancelTransition(using: transitionContext)
+        default: animator?.continueTransition()
+        }
     }
 
     func currentPresentationState(for gestureController: BottomSheetGestureController) -> BottomSheetPresentationController.State {
-        return state
+        return presentationState
     }
 }

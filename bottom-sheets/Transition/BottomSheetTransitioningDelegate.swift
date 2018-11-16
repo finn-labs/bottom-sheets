@@ -8,6 +8,11 @@
 
 import UIKit
 
+extension BottomSheetTransitioningDelegate {
+    enum State {
+        case present, dismiss
+    }
+}
 
 class BottomSheetTransitioningDelegate: NSObject, UIViewControllerTransitioningDelegate {
 
@@ -19,7 +24,6 @@ class BottomSheetTransitioningDelegate: NSObject, UIViewControllerTransitioningD
     }
 
     func animationController(forPresented presented: UIViewController, presenting: UIViewController, source: UIViewController) -> UIViewControllerAnimatedTransitioning? {
-        print("a controller")
         return BottomSheetAnimationController()
     }
 
@@ -30,19 +34,18 @@ class BottomSheetTransitioningDelegate: NSObject, UIViewControllerTransitioningD
     func interactionControllerForPresentation(using animator: UIViewControllerAnimatedTransitioning) -> UIViewControllerInteractiveTransitioning? {
         guard let animator = animator as? BottomSheetAnimationController else { return nil }
         let interactionController = BottomSheetInteractionController()
-        presentationController?.interactionController = interactionController
         interactionController.animator = animator
-        animator.state = .present
+        interactionController.transitionState = .present
+        presentationController?.interactionController = interactionController
         return interactionController
     }
 
     func interactionControllerForDismissal(using animator: UIViewControllerAnimatedTransitioning) -> UIViewControllerInteractiveTransitioning? {
         guard let animator = animator as? BottomSheetAnimationController else { return nil }
         let interactionController = BottomSheetInteractionController()
-        presentationController?.interactionController = interactionController
         interactionController.animator = animator
-        animator.state = .dismiss
+        interactionController.transitionState = .dismiss
+        presentationController?.interactionController = interactionController
         return interactionController
     }
-
 }

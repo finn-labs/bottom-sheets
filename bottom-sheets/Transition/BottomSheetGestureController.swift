@@ -9,32 +9,37 @@
 import UIKit
 
 protocol BottomSheetGestureControllerDelegate: class {
-    func gestureDidBegin() -> CGFloat
+    func gestureDidBegin() -> CGFloat // Expects to get the current position of the bottom sheet
     func gestureDidChange(position: CGFloat)
-    func gestureDidEnd(with state: BottomSheetPresentationController.State, andTargetPosition position: CGFloat)
+    func gestureDidEnd(with state: BottomSheetPresentationController.State, targetPosition position: CGFloat, andVelocity velocity: CGFloat)
     func currentPresentationState(for gestureController: BottomSheetGestureController) -> BottomSheetPresentationController.State
 }
 
 class BottomSheetGestureController {
 
+    var velocity = 0 as CGFloat
     weak var delegate: BottomSheetGestureControllerDelegate?
 
     private var initialConstant = 0 as CGFloat
     private lazy var panGesture = UIPanGestureRecognizer(target: self, action: #selector(handlePan(gesture:)))
+    private let presentedView: UIView
     private let containerView: UIView
 
     private var minValue = 44 as CGFloat
     private var threshold = 75 as CGFloat
 
-    init(containerView: UIView) {
+    init(presentedView: UIView, containerView: UIView) {
+        self.presentedView = presentedView
         self.containerView = containerView
-        containerView.addGestureRecognizer(panGesture)
+        presentedView.addGestureRecognizer(panGesture)
     }
 }
 
 private extension BottomSheetGestureController {
     @objc func handlePan(gesture: UIPanGestureRecognizer) {
         let transition = gesture.translation(in: containerView)
+        let velocity = gesture.velocity(in: containerView)
+        self.velocity = velocity.y
 
         switch gesture.state {
         case .began:
@@ -48,7 +53,7 @@ private extension BottomSheetGestureController {
             guard let currentState = delegate?.currentPresentationState(for: self) else { return }
             let nextState = self.nextState(forTransition: transition, withCurrent: currentState, usingThreshold: threshold)
             let targetPosition = self.targetPosition(for: nextState)
-            delegate?.gestureDidEnd(with: nextState, andTargetPosition: targetPosition)
+            delegate?.gestureDidEnd(with: nextState, targetPosition: targetPosition, andVelocity: velocity.y)
 
         default:
             return

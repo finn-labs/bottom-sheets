@@ -68,10 +68,10 @@
 		DA03615A216CB82B00223736 /* bottom-sheets */ = {
 			isa = PBXGroup;
 			children = (
-				DA03615B216CB82B00223736 /* AppDelegate.swift */,
 				DA4B2A0A219DA31A0008AC87 /* Controllers */,
 				DA4B2A08219D9C0C0008AC87 /* Transition */,
 				DA4B2A09219DA30C0008AC87 /* Animators */,
+				DA03615B216CB82B00223736 /* AppDelegate.swift */,
 				DA2D2823217DB2050016E8AE /* Extensions.swift */,
 				DA036162216CB82C00223736 /* Assets.xcassets */,
 				DA036164216CB82C00223736 /* LaunchScreen.storyboard */,
@@ -84,9 +84,9 @@
 			isa = PBXGroup;
 			children = (
 				DA03616D216CC71300223736 /* BottomSheetTransitioningDelegate.swift */,
-				DA4B2A06219C759D0008AC87 /* BottomSheetAnimationController.swift */,
-				DA4B2A02219C73C90008AC87 /* BottomSheetInteractionController.swift */,
 				DA05C4C8217626D90005AAF0 /* BottomSheetPresentationController.swift */,
+				DA4B2A02219C73C90008AC87 /* BottomSheetInteractionController.swift */,
+				DA4B2A06219C759D0008AC87 /* BottomSheetAnimationController.swift */,
 				DA4B2A0B219DA8B60008AC87 /* BottomSheetGestureController.swift */,
 			);
 			path = Transition;

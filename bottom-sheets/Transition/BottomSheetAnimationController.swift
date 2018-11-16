@@ -8,16 +8,10 @@
 
 import UIKit
 
-extension BottomSheetAnimationController {
-    enum State {
-        case present, dismiss
-    }
-}
-
 class BottomSheetAnimationController: NSObject, UIViewControllerAnimatedTransitioning {
 
-    var state: State = .present
     var initialVelocity = 0 as CGFloat
+    var targetPosition = 0 as CGFloat
 
     private let animator = SpringAnimator(dampingRatio: 0.78, frequencyResponse: 0.5)
 
@@ -30,17 +24,17 @@ class BottomSheetAnimationController: NSObject, UIViewControllerAnimatedTransiti
     }
 
     func animateTransition(using transitionContext: UIViewControllerContextTransitioning) {
-        animator.targetPosition = transitionContext.containerView.frame.height / 2
         animator.completion = { didComplete in
             transitionContext.completeTransition(didComplete)
         }
+        animator.targetPosition = targetPosition
         animator.initialVelocity = initialVelocity
         animator.startAnimation()
     }
 
     func cancelTransition(using transitionContext: UIViewControllerContextTransitioning) {
         guard animator.state == .paused else { return }
-        animator.targetPosition = transitionContext.containerView.frame.height
+        animator.targetPosition = targetPosition
         animator.completion = { _ in
             transitionContext.completeTransition(false)
         }
@@ -48,12 +42,13 @@ class BottomSheetAnimationController: NSObject, UIViewControllerAnimatedTransiti
         animator.continueAnimation()
     }
 
-    func pauseAnimation() {
+    func pauseTransition() {
         animator.pauseAnimation()
     }
 
-    func continueAnimation(toTargetPosition position: CGFloat) {
-        animator.targetPosition = position
+    func continueTransition() {
+        animator.targetPosition = targetPosition
+        animator.initialVelocity = initialVelocity
         animator.continueAnimation()
     }
 }
