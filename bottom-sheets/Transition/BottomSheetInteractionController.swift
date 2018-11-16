@@ -17,7 +17,7 @@ import UIKit
 **/
 class BottomSheetInteractionController: NSObject, UIViewControllerInteractiveTransitioning {
 
-    var animator: BottomSheetAnimationController?
+    let animationController: BottomSheetAnimationController
     var initialTransitionVelocity = 0 as CGFloat
     var targetTransitionPosition = 0 as CGFloat
 
@@ -26,18 +26,22 @@ class BottomSheetInteractionController: NSObject, UIViewControllerInteractiveTra
     private var constraint: NSLayoutConstraint?
     private var transitionContext: UIViewControllerContextTransitioning?
 
+    init(animationController: BottomSheetAnimationController) {
+        self.animationController = animationController
+    }
+
     func setup(with constraint: NSLayoutConstraint?) {
         self.constraint = constraint
-        animator?.setup(with: constraint)
+        animationController.setup(with: constraint)
     }
 
     func startInteractiveTransition(_ transitionContext: UIViewControllerContextTransitioning) {
         // Keep track of context for any future transition related actions
         self.transitionContext = transitionContext
         // Start transition animation
-        animator?.targetPosition = targetTransitionPosition
-        animator?.initialVelocity = initialTransitionVelocity
-        animator?.animateTransition(using: transitionContext)
+        animationController.targetPosition = targetTransitionPosition
+        animationController.initialVelocity = initialTransitionVelocity
+        animationController.animateTransition(using: transitionContext)
     }
 }
 
@@ -45,7 +49,7 @@ class BottomSheetInteractionController: NSObject, UIViewControllerInteractiveTra
 extension BottomSheetInteractionController: BottomSheetGestureControllerDelegate {
     func gestureDidBegin() -> CGFloat {
         // interrupt the transition
-        animator?.pauseTransition()
+        animationController.pauseTransition()
         return constraint?.constant ?? 0
     }
 
@@ -57,11 +61,11 @@ extension BottomSheetInteractionController: BottomSheetGestureControllerDelegate
     func gestureDidEnd(with state: BottomSheetPresentationController.State, targetPosition position: CGFloat, andVelocity velocity: CGFloat) {
         guard let transitionContext = transitionContext else { return }
         self.presentationState = state
-        animator?.initialVelocity = velocity
-        animator?.targetPosition = position
+        animationController.initialVelocity = velocity
+        animationController.targetPosition = position
         switch state {
-        case .dismissed: animator?.cancelTransition(using: transitionContext)
-        default: animator?.continueTransition()
+        case .dismissed: animationController.cancelTransition(using: transitionContext)
+        default: animationController.continueTransition()
         }
     }
 

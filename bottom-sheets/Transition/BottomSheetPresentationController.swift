@@ -28,7 +28,7 @@ extension BottomSheetPresentationController {
 
 class BottomSheetPresentationController: UIPresentationController {
     
-    var interactionController: BottomSheetInteractionController?
+    let interactionController: BottomSheetInteractionController
     // Constraint is used to set the y position of the bottom sheet
     private var constraint: NSLayoutConstraint?
     private var gestureController: BottomSheetGestureController?
@@ -42,6 +42,11 @@ class BottomSheetPresentationController: UIPresentationController {
 
     override var shouldPresentInFullscreen: Bool {
         return false
+    }
+
+    init(presentedViewController: UIViewController, presenting: UIViewController?, interactionController: BottomSheetInteractionController) {
+        self.interactionController = interactionController
+        super.init(presentedViewController: presentedViewController, presenting: presenting)
     }
 
     override func presentationTransitionWillBegin() {
@@ -60,8 +65,8 @@ class BottomSheetPresentationController: UIPresentationController {
         gestureController = BottomSheetGestureController(presentedView: presentedView, containerView: containerView)
         gestureController?.delegate = interactionController
         // Setup interactive transition for presenting
-        interactionController?.setup(with: constraint)
-        interactionController?.targetTransitionPosition = containerView.frame.height / 2
+        interactionController.setup(with: constraint)
+        interactionController.targetTransitionPosition = containerView.frame.height / 2
     }
 
     override func presentationTransitionDidEnd(_ completed: Bool) {
@@ -74,10 +79,9 @@ class BottomSheetPresentationController: UIPresentationController {
         // Clean up animator and gesture
         springAnimator.stopAnimation()
         // Setup interaction controller for dismissal
-        interactionController?.setup(with: constraint)
-        interactionController?.presentationState = presentationState
-        interactionController?.initialTransitionVelocity = gestureController?.velocity ?? 0
-        interactionController?.targetTransitionPosition = containerView?.frame.height ?? 0
+        interactionController.presentationState = presentationState
+        interactionController.initialTransitionVelocity = gestureController?.velocity ?? 0
+        interactionController.targetTransitionPosition = containerView?.frame.height ?? 0
     }
 
     override func dismissalTransitionDidEnd(_ completed: Bool) {
@@ -90,7 +94,7 @@ class BottomSheetPresentationController: UIPresentationController {
 private extension BottomSheetPresentationController {
     func setupInteractivePresentation() {
         // Setup gesture and animation for presentation
-        presentationState = interactionController?.presentationState ?? .compressed
+        presentationState = interactionController.presentationState
         gestureController?.delegate = self
         springAnimator.constraint = constraint
     }
