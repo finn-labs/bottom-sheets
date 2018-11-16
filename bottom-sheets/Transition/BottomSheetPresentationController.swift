@@ -67,7 +67,7 @@ class BottomSheetPresentationController: UIPresentationController {
     override func presentationTransitionDidEnd(_ completed: Bool) {
         // If completed is false, the transition was cancelled by user interacion
         guard completed else { return }
-        setupPresentation()
+        setupInteractivePresentation()
     }
 
     override func dismissalTransitionWillBegin() {
@@ -83,12 +83,12 @@ class BottomSheetPresentationController: UIPresentationController {
     override func dismissalTransitionDidEnd(_ completed: Bool) {
         // Completed should always be true at this point of development
         guard !completed else { return }
-        setupPresentation()
+        setupInteractivePresentation()
     }
 }
 
 private extension BottomSheetPresentationController {
-    func setupPresentation() {
+    func setupInteractivePresentation() {
         // Setup gesture and animation for presentation
         presentationState = interactionController?.presentationState ?? .compressed
         gestureController?.delegate = self
