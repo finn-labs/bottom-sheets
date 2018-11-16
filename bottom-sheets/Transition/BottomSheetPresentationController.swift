@@ -8,6 +8,16 @@
 
 import UIKit
 
+/**
+ The presentation controller is controlling how the bottom sheet is presented.
+ This object operates together with the interaction controller to create the complete transition.
+
+ When the presentation transition begins, this object will create a gesture controller and set its delegate to the interaction controller in order to interact with the transition animation.
+ After the transition if finished, this objects becomes the gesture controllers delegate and is in controller of the constraint during the presentation.
+
+ At this point, only the presenting transition is made interactive because the presentation is it self an interactive way of dismissing the bottom sheet.
+**/
+
 extension BottomSheetPresentationController {
     enum State {
         case expanded
@@ -19,7 +29,7 @@ extension BottomSheetPresentationController {
 class BottomSheetPresentationController: UIPresentationController {
     
     var interactionController: BottomSheetInteractionController?
-
+    // Constraint is used to set the y position of the bottom sheet
     private var constraint: NSLayoutConstraint?
     private var gestureController: BottomSheetGestureController?
 
@@ -49,11 +59,12 @@ class BottomSheetPresentationController: UIPresentationController {
         // Setup gesture with interactive transition as delegate
         gestureController = BottomSheetGestureController(presentedView: presentedView, containerView: containerView)
         gestureController?.delegate = interactionController
-        // Setup interactive transition
+        // Setup interactive transition for presenting
         interactionController?.setup(with: constraint)
     }
 
     override func presentationTransitionDidEnd(_ completed: Bool) {
+        // If completed is false, the transition was cancelled by user interacion
         guard completed else { return }
         setupPresentation()
     }
@@ -68,6 +79,7 @@ class BottomSheetPresentationController: UIPresentationController {
     }
 
     override func dismissalTransitionDidEnd(_ completed: Bool) {
+        // Completed should always be true at this point of development
         guard !completed else { return }
         setupPresentation()
     }
@@ -83,11 +95,12 @@ private extension BottomSheetPresentationController {
 }
 
 extension BottomSheetPresentationController: BottomSheetGestureControllerDelegate {
+    // This method expects to return the current y position of the bottom sheet
     func gestureDidBegin() -> CGFloat {
         springAnimator.pauseAnimation()
         return constraint?.constant ?? 0
     }
-
+    // Position is the y position of the bottom sheet in the container view
     func gestureDidChange(position: CGFloat) {
         constraint?.constant = position
     }

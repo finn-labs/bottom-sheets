@@ -24,21 +24,21 @@ class BottomSheetAnimationController: NSObject, UIViewControllerAnimatedTransiti
     }
 
     func animateTransition(using transitionContext: UIViewControllerContextTransitioning) {
+        animator.targetPosition = targetPosition
+        animator.initialVelocity = initialVelocity
         animator.completion = { didComplete in
             transitionContext.completeTransition(didComplete)
         }
-        animator.targetPosition = targetPosition
-        animator.initialVelocity = initialVelocity
         animator.startAnimation()
     }
 
     func cancelTransition(using transitionContext: UIViewControllerContextTransitioning) {
         guard animator.state == .paused else { return }
         animator.targetPosition = targetPosition
+        animator.initialVelocity = initialVelocity
         animator.completion = { _ in
             transitionContext.completeTransition(false)
         }
-        animator.initialVelocity = initialVelocity
         animator.continueAnimation()
     }
 

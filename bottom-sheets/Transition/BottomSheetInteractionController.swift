@@ -8,6 +8,12 @@
 
 import UIKit
 
+/**
+ This class is controlling the animation of the transition using the animator object
+
+ This object should be delegate of the gesture controller during the transition in order to controll the constraint.
+ The presentation controller owns the gesture controller and have to set the delegate.
+**/
 class BottomSheetInteractionController: NSObject, UIViewControllerInteractiveTransitioning {
 
     var animator: BottomSheetAnimationController?

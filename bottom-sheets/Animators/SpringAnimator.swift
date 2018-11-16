@@ -45,7 +45,7 @@ class SpringAnimator: NSObject {
     }
 
     func startAnimation() {
-        if state == .paused { stopAnimation(didComplete: false) }
+        if state == .paused { continueAnimation() }
 
         guard let constraint = constraint else { return }
         position = targetPosition - constraint.constant
