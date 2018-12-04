@@ -8,32 +8,41 @@
 
 import UIKit
 
+extension BottomSheetTransitioningDelegate {
+    enum State {
+        case present, dismiss
+    }
+}
 
-class BottomSheetTransition: NSObject, UIViewControllerTransitioningDelegate {
+class BottomSheetTransitioningDelegate: NSObject, UIViewControllerTransitioningDelegate {
 
-    var controller: BottomSheetPresentationController?
-    weak var delegate: BottomSheetPresentationDelegate?
+    var presentationController: BottomSheetPresentationController?
+    let interactionController: BottomSheetInteractionController
+    let animationController: BottomSheetAnimationController
+
+    override init() {
+        animationController = BottomSheetAnimationController()
+        interactionController = BottomSheetInteractionController(animationController: animationController)
+    }
 
     func presentationController(forPresented presented: UIViewController, presenting: UIViewController?, source: UIViewController) -> UIPresentationController? {
-        controller = BottomSheetPresentationController(presentedViewController: presented, presenting: presenting)
-        controller?.bottomSheetDelegate = delegate
-        return controller
+        presentationController = BottomSheetPresentationController(presentedViewController: presented, presenting: presenting, interactionController: interactionController)
+        return presentationController
     }
 
     func animationController(forPresented presented: UIViewController, presenting: UIViewController, source: UIViewController) -> UIViewControllerAnimatedTransitioning? {
-        return controller
+        return animationController
     }
 
     func animationController(forDismissed dismissed: UIViewController) -> UIViewControllerAnimatedTransitioning? {
-        return controller
+        return animationController
     }
 
     func interactionControllerForPresentation(using animator: UIViewControllerAnimatedTransitioning) -> UIViewControllerInteractiveTransitioning? {
-        return controller
+        return interactionController
     }
 
     func interactionControllerForDismissal(using animator: UIViewControllerAnimatedTransitioning) -> UIViewControllerInteractiveTransitioning? {
-        return controller
+        return interactionController
     }
-
 }

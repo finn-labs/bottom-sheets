@@ -8,14 +8,14 @@
 
 import UIKit
 
-extension BottomSheetSpringAnimator {
+extension SpringAnimator {
 
     enum State {
         case animating, paused, cancelled, stopped
     }
 }
 
-class BottomSheetSpringAnimator: NSObject {
+class SpringAnimator: NSObject {
 
     // Spring properties
     let damping: CGFloat
@@ -45,7 +45,7 @@ class BottomSheetSpringAnimator: NSObject {
     }
 
     func startAnimation() {
-        if state == .paused { stopAnimation(didComplete: false) }
+        if state == .paused { continueAnimation() }
 
         guard let constraint = constraint else { return }
         position = targetPosition - constraint.constant
@@ -77,7 +77,7 @@ class BottomSheetSpringAnimator: NSObject {
     }
 }
 
-private extension BottomSheetSpringAnimator {
+private extension SpringAnimator {
 
     @objc func step(displayLink: CADisplayLink) {
         let acceleration = -velocity * damping - position * stiffness

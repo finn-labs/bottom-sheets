@@ -8,19 +8,7 @@
 
 import UIKit
 
-extension BottomSheet {
-
-    enum State {
-        case expanded
-        case compressed
-        case dismissed
-    }
-}
-
 class BottomSheet: UIViewController {
-
-    static let dampingRatio = 0.85 as CGFloat
-    static let frequencyResponse = 0.45 as CGFloat
 
     let notch: UIView = {
         let view = UIView(frame: .zero)
@@ -30,14 +18,13 @@ class BottomSheet: UIViewController {
         return view
     }()
 
-    let transitionDelegate = BottomSheetTransition()
+    let transitionDelegate = BottomSheetTransitioningDelegate()
 
     var rootViewController: UIViewController
 
     init(rootViewController: UIViewController) {
         self.rootViewController = rootViewController
         super.init(nibName: nil, bundle: nil)
-        transitionDelegate.delegate = self
         transitioningDelegate = transitionDelegate
         modalPresentationStyle = .custom
     }
@@ -74,13 +61,3 @@ class BottomSheet: UIViewController {
     }
 }
 
-extension BottomSheet: BottomSheetPresentationDelegate {
-    func bottomSheetDidChangeState(_ state: BottomSheet.State) {
-        print("Did change state")
-    }
-
-    func bottomSheetDidFullyExpand() {
-        guard let tableViewController = rootViewController as? UITableViewController else { return }
-        tableViewController.tableView.isScrollEnabled = true
-    }
-}
