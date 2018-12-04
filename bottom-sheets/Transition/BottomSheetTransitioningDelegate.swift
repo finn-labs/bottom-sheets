@@ -8,12 +8,6 @@
 
 import UIKit
 
-extension BottomSheetTransitioningDelegate {
-    enum State {
-        case present, dismiss
-    }
-}
-
 class BottomSheetTransitioningDelegate: NSObject, UIViewControllerTransitioningDelegate {
 
     var presentationController: BottomSheetPresentationController?

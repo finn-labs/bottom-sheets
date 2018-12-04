@@ -9,7 +9,6 @@
 import UIKit
 
 extension SpringAnimator {
-
     enum State {
         case animating, paused, cancelled, stopped
     }
